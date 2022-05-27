@@ -4,7 +4,7 @@ plugins {
 	id 'java'
 }
 
-group = 'com.tintachina84.microservice.core.review'
+group = 'com.tintachina84.api'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
@@ -12,10 +12,14 @@ repositories {
 	mavenCentral()
 }
 
+ext {
+    springBootVersion = '2.7.0'
+}
+
 dependencies {
+	implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+
 	implementation project(':api')
-    implementation project(':util')
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.projectreactor:reactor-test'
