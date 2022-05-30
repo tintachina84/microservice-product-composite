@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface ProductCompositeService {
 
     @GetMapping(
-        value = "/product-composite/{productId}",
-        consumes = "application/json"
+            value = "/product-composite/{productId}",
+            produces = "application/json"
     )
     ProductAggregate getProduct(@PathVariable int productId);
 }

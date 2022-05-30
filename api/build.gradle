@@ -1,10 +1,9 @@
 plugins {
-	id 'org.springframework.boot' version '2.7.0'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
 }
 
-group = 'com.tintachina84.api'
+group = 'com.tintachina84.api.core'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
@@ -13,13 +12,14 @@ repositories {
 }
 
 ext {
-    springBootVersion = '2.7.0'
+	springBootVersion = '2.7.0'
 }
 
 dependencies {
 	implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
 
-	implementation project(':api')
+	compileOnly 'org.projectlombok:lombok:1.18.24'
+	implementation 'io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.projectreactor:reactor-test'
