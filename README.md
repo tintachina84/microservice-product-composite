@@ -21,3 +21,8 @@ docker-compose up -d
 docker-compose logs -f
 docker-compose down
 ```
+
+### Docker Test Script
+```shell
+./gradlew clean build && docker-compose build && ./test-em-all-02-docker.bash start stop
+```
