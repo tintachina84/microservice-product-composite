@@ -26,3 +26,12 @@ docker-compose down
 ```shell
 ./gradlew clean build && docker-compose build && ./test-em-all-02-docker.bash start stop
 ```
+
+### Swagger Test
+```shell
+./gradlew build && docker-compose build && docker-compose up
+```
+
+Swagger 페이지 방문
+`http://localhost:8080/openapi/swagger-ui.html`
+
