@@ -1,9 +1,12 @@
 package com.tintachina84.microservices.core.product.services;
 
+import com.mongodb.DuplicateKeyException;
 import com.tintachina84.api.core.product.Product;
 import com.tintachina84.api.core.product.ProductService;
 import com.tintachina84.api.exceptions.InvalidInputException;
 import com.tintachina84.api.exceptions.NotFoundException;
+import com.tintachina84.microservices.core.product.persistence.ProductEntity;
+import com.tintachina84.microservices.core.product.persistence.ProductRepository;
 import com.tintachina84.util.http.ServiceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,10 +19,28 @@ public class ProductServiceImpl implements ProductService {
     private static final Logger LOG = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     private final ServiceUtil serviceUtil;
+    private final ProductRepository repository;
+    private final ProductMapper mapper;
 
     @Autowired
-    public ProductServiceImpl(ServiceUtil serviceUtil) {
+    public ProductServiceImpl(ServiceUtil serviceUtil, ProductRepository repository, ProductMapper mapper) {
         this.serviceUtil = serviceUtil;
+        this.repository = repository;
+        this.mapper = mapper;
+    }
+
+    @Override
+    public Product createProduct(Product body) {
+        try {
+            ProductEntity entity = mapper.apiToEntity(body);
+            ProductEntity newEntity = repository.save(entity);
+
+            LOG.debug("createProduct: entity created for productId: {}", body.getProductId());
+            return mapper.entityToApi(newEntity);
+
+        } catch (DuplicateKeyException dke) {
+            throw new InvalidInputException("Duplicate key, Product Id: " + body.getProductId());
+        }
     }
 
     @Override

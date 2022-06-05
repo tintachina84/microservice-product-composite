@@ -9,11 +9,15 @@ import com.tintachina84.api.core.recommendation.Recommendation;
 import com.tintachina84.api.core.review.Review;
 import com.tintachina84.api.exceptions.NotFoundException;
 import com.tintachina84.util.http.ServiceUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ProductCompositeServiceImpl implements ProductCompositeService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ProductCompositeServiceImpl.class);
 
     private final ServiceUtil serviceUtil;
     private ProductCompositeIntegration integration;
@@ -24,6 +28,11 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
 
         this.serviceUtil = serviceUtil;
         this.integration = integration;
+    }
+
+    @Override
+    public void createProduct(ProductAggregate body) {
+
     }
 
     @Override
@@ -39,6 +48,11 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
         List<Review> reviews = integration.getReviews(productId);
 
         return createProductAggregate(product, recommendations, reviews, serviceUtil.getServiceAddress());
+    }
+
+    @Override
+    public void deleteProduct(int productId) {
+
     }
 
     private ProductAggregate createProductAggregate(
