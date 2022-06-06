@@ -1,6 +1,5 @@
 package com.tintachina84.microservices.core.product.services;
 
-import com.mongodb.DuplicateKeyException;
 import com.tintachina84.api.core.product.Product;
 import com.tintachina84.api.core.product.ProductService;
 import com.tintachina84.api.exceptions.InvalidInputException;
@@ -11,6 +10,7 @@ import com.tintachina84.util.http.ServiceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -56,5 +56,11 @@ public class ProductServiceImpl implements ProductService {
         }
 
         return new Product(productId, "name-" + productId, 123, serviceUtil.getServiceAddress());
+    }
+
+    @Override
+    public void deleteProduct(int productId) {
+        LOG.debug("deleteProduct: tries to delete an entity with productId: {}", productId);
+        repository.findByProductId(productId).ifPresent(e -> repository.delete(e));
     }
 }
