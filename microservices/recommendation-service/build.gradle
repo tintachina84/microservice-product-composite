@@ -41,6 +41,7 @@ dependencies {
 	testImplementation 'org.testcontainers:testcontainers'
 	testImplementation 'org.testcontainers:junit-jupiter'
 	testImplementation 'org.testcontainers:mongodb'
+	// mac m1에서 testcontainers 구동을 위한 추가 의존성
 	testImplementation 'net.java.dev.jna:jna-platform:5.8.0'
 }
 

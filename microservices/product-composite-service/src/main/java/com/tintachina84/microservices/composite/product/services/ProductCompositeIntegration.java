@@ -52,8 +52,8 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
         this.mapper = mapper;
 
         productServiceUrl = "http://" + productServiceHost + ":" + productServicePort + "/product";
-        recommendationServiceUrl = "http://" + recommendationServiceHost + ":" + recommendationServicePort + "/recommendation?productId=";
-        reviewServiceUrl = "http://" + reviewServiceHost + ":" + reviewServicePort + "/review?productId=";
+        recommendationServiceUrl = "http://" + recommendationServiceHost + ":" + recommendationServicePort + "/recommendation";
+        reviewServiceUrl = "http://" + reviewServiceHost + ":" + reviewServicePort + "/review";
     }
 
     @Override
@@ -153,12 +153,27 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
         }
     }
 
-    public List<Review> getReviews(int productId) {
-
+    @Override
+    public Review createReview(Review body) {
         try {
-            String url = reviewServiceUrl + productId;
+            String url = reviewServiceUrl;
+            LOG.debug("Will post a new review to URL: {}", url);
 
-            LOG.debug("Will call getReviews API on URL: {}", url);
+            Review review = restTemplate.postForObject(url, body, Review.class);
+            LOG.debug("Created a review with id: {}", review.getProductId());
+
+            return review;
+
+        } catch (HttpClientErrorException ex) {
+            throw handleHttpClientException(ex);
+        }
+    }
+
+    public List<Review> getReviews(int productId) {
+        try {
+            String url = reviewServiceUrl + "?productId=" + productId;
+
+            LOG.debug("Will call the getReviews API on URL: {}", url);
             List<Review> reviews = restTemplate
                     .exchange(url, GET, null, new ParameterizedTypeReference<List<Review>>() {})
                     .getBody();
@@ -169,6 +184,19 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
         } catch (Exception ex) {
             LOG.warn("Got an exception while requesting reviews, return zero reviews: {}", ex.getMessage());
             return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public void deleteReviews(int productId) {
+        try {
+            String url = reviewServiceUrl + "?productId=" + productId;
+            LOG.debug("Will call the deleteReviews API on URL: {}", url);
+
+            restTemplate.delete(url);
+
+        } catch (HttpClientErrorException ex) {
+            throw handleHttpClientException(ex);
         }
     }
 

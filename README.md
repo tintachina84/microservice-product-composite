@@ -32,6 +32,16 @@ docker-compose down
 ./gradlew build && docker-compose build && docker-compose up
 ```
 
+필요시 docker image pull 한 후에 gradle 빌드한다.
+```shell
+docker pull --platform=linux/amd64 mongo:4.4.2
+docker pull --platform=linux/amd64 mysql:5.7.32
+./gradlew build
+```
+
+
 Swagger 페이지 방문
 `http://localhost:8080/openapi/swagger-ui.html`
+
+POST 페이지에서 임의의 productId를 insert 한 후에 get 취득 테스트를 해본다.
 
