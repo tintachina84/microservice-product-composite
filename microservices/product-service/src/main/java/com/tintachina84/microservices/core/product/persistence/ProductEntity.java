@@ -26,6 +26,11 @@ public class ProductEntity {
         this.weight = weight;
     }
 
+    @Override
+    public String toString() {
+        return String.format("ProductEntity: %s", productId);
+    }
+
     public String getId() {
         return id;
     }

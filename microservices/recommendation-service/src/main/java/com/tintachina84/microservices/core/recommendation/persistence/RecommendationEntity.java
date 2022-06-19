@@ -32,6 +32,11 @@ public class RecommendationEntity {
         this.content = content;
     }
 
+    @Override
+    public String toString() {
+        return String.format("RecommendationEntity: %s/%d", productId, recommendationId);
+    }
+
     public String getId() {
         return id;
     }

@@ -5,7 +5,18 @@ services:
     build: microservices/product-service
     mem_limit: 512m
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_PROFILES_ACTIVE=docker,streaming_partitioned,streaming_instance_0
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  product-p1:
+    build: microservices/product-service
+    mem_limit: 512m
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker,streaming_partitioned,streaming_instance_1
     depends_on:
       mongodb:
         condition: service_healthy
@@ -16,7 +27,18 @@ services:
     build: microservices/recommendation-service
     mem_limit: 512m
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_PROFILES_ACTIVE=docker,streaming_partitioned,streaming_instance_0
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  recommendation-p1:
+    build: microservices/recommendation-service
+    mem_limit: 512m
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker,streaming_partitioned,streaming_instance_1
     depends_on:
       mongodb:
         condition: service_healthy
@@ -27,7 +49,18 @@ services:
     build: microservices/review-service
     mem_limit: 512m
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_PROFILES_ACTIVE=docker,streaming_partitioned,streaming_instance_0
+    depends_on:
+      mysql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  review-p1:
+    build: microservices/review-service
+    mem_limit: 512m
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker,streaming_partitioned,streaming_instance_1
     depends_on:
       mysql:
         condition: service_healthy
@@ -40,14 +73,13 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_PROFILES_ACTIVE=docker,streaming_partitioned
     depends_on:
       rabbitmq:
         condition: service_healthy
 
   mongodb:
     platform: linux/amd64
-    #platform: linux/arm64/v8
     image: mongo:4.4.2
     mem_limit: 512m
     ports:
@@ -61,7 +93,6 @@ services:
 
   mysql:
     platform: linux/amd64
-    #platform: linux/arm64/v8
     image: mysql:5.7.32
     mem_limit: 512m
     ports:
@@ -78,6 +109,7 @@ services:
       retries: 60
 
   rabbitmq:
+    platform: linux/amd64
     image: rabbitmq:3.8.11-management
     mem_limit: 512m
     ports:

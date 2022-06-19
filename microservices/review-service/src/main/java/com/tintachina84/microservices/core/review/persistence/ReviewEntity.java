@@ -29,6 +29,11 @@ public class ReviewEntity {
         this.content = content;
     }
 
+    @Override
+    public String toString() {
+        return String.format("ReviewEntity: %s/%d", productId, reviewId);
+    }
+
     public int getId() {
         return id;
     }
